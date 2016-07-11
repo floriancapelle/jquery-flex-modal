@@ -22,13 +22,13 @@
     var conf = {
         triggerSelector: '[data-modal-target]',
         triggerTargetKey: 'modalTarget',
-        modalItemClass: 'tiny-modal-item',
-        modalItemContentClass: 'tiny-modal-item__content',
-        modalItemCloseClass: 'tiny-modal-item__close',
-        modalItemTpl: '<article class="tiny-modal-item"><div class="tiny-modal-item__content"></div></article>',
-        visibilityToggleClass: 'tiny-modal-item--visible',
+        modalItemClass: 'flex-modal-item',
+        modalItemContentClass: 'flex-modal-item__content',
+        modalItemCloseClass: 'flex-modal-item__close',
+        modalItemTpl: '<article class="flex-modal-item"><div class="flex-modal-item__content"></div></article>',
+        visibilityToggleClass: 'flex-modal-item--visible',
         modalOptions: {
-            closeBtnMarkup: '<button class="tiny-modal-item__close" type="button">x</button>',
+            closeBtnMarkup: '<button class="flex-modal-item__close" type="button">x</button>',
             autoCloseOthers: true,
             closeOnOverlayClick: true,
             closeOnEscKey: true,
@@ -48,7 +48,7 @@
     function init() {
         // create wrapper and append to configured element
         var $body = $('body');
-        $root = $('<aside class="tiny-modal"></aside>');
+        $root = $('<aside class="flex-modal"></aside>');
 
         // append wrapper to body
         $body.append($root);

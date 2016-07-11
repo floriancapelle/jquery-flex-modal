@@ -12,17 +12,26 @@
         /* Demo css */
         html {
             font-family: Verdana, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
             height: 100%;
             background-color: #f2f2f2;
             overflow-y: scroll;
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
         body {
+            display: -webkit-flex;
             display: flex;
+            -webkit-flex-direction: column;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             height: 100vh;
-            font-size: 14px;
             margin: 0;
+        }
+
+        .page-content {
+            margin-top: -5%;
             text-align: center;
         }
 
@@ -57,6 +66,23 @@
             outline: none;
             background: #003A61;
         }
+
+        /* modals */
+        .modal-1 .tiny-layer-item__content {
+            text-align: center;
+        }
+
+        .modal-2 .tiny-layer-item__content {
+            max-width: 400px;
+            text-align: center;
+        }
+        .modal-2 .tiny-layer-item__content ul {
+            text-align: left;
+        }
+
+        .modal-3 .loading {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -65,20 +91,28 @@
         <h1>jQuery FlexModal Demo</h1>
 
         <div class="btn-wrap">
-            <button class="btn btn-default" type="button" data-modal-target="#modal-1">Simple Notification</button>
-            <button class="btn btn-default" type="button" data-modal-target="#modal-2">Simple Modal</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-1">Simple</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-2">Confirmation</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-3">Ajax</button>
         </div>
     </main>
 
     <div id="modal-1" class="modal-1 flex-modal-hide">
-        <h3>Simple Notification</h3>
-        <p>with <b>custom</b> markup and styling</p>
+        <h3>Simple</h3>
+        <p>Just a text to display</p>
     </div>
 
     <div id="modal-2" class="modal-2 flex-modal-hide" data-close-on-overlay-click="false" data-close-on-esc-key="false" data-close-btn-markup="false">
-        <h3>Simple Modal</h3>
-        <p>custom events delegated on the modal</p>
+        <h3>Confirmation</h3>
+        <ul>
+            <li>Notification is not closeable via close btn, overlay or esc key</li>
+            <li>Custom event to handle user input and close the modal</li>
+        </ul>
         <button class="btn btn-default" type="button">Close modal</button>
+    </div>
+
+    <div id="modal-3" class="modal-3 flex-modal-hide">
+        <h3>Ajax</h3>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -87,13 +121,25 @@
     <script>
         $(function( $ ) {
             $('#modal-2').data({
-                events: [
-                    {'click': function( event ) {
-                        if ( !$(event.target).is('button') ) return;
+                onCreate: function( api ) {
+                    $(this).on('click', 'button', function() {
+                        api.close('#modal-2');
+                    });
+                }
+            });
 
-                        $.flexModal.close('#modal-2');
-                    }}
-                ]
+            $('#modal-3').data({
+                onCreate: function( api ) {
+                    var $modalContent = $(this).children();
+
+                    $.ajax({
+                        url: 'ajax-content.html',
+                        cache: false,
+                        success: function( data ) {
+                            $modalContent.append(data);
+                        }
+                    });
+                }
             });
         });
     </script>
