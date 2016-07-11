@@ -1,10 +1,10 @@
-/* set this class to hide layers on pageload */
+/* set this class to hide modals on pageload */
 /* use your existing modifiers if you can */
-.tiny-layer-hide {
+.flex-modal-hide {
     display: none;
 }
 
-.tiny-layer-item {
+.flex-modal-item {
     position: fixed;
     left: 0;
     top: 0;
@@ -19,11 +19,11 @@
     transition: opacity 0.01s;
     opacity: 0;
 }
-.tiny-layer-item--visible {
+.flex-modal-item--visible {
     opacity: 1;
 }
 
-.tiny-layer-item__content {
+.flex-modal-item__content {
     position: relative;
     min-width: 250px;
     padding: 30px 40px 30px 30px;
@@ -31,7 +31,7 @@
     box-shadow: 0 1px 6px rgba(0, 0, 0, .25);
     background: #fff;
 }
-.tiny-layer-item__close {
+.flex-modal-item__close {
     position: absolute;
     top: 10px;
     right: 10px;

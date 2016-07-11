@@ -1,5 +1,5 @@
-/*! jQuery Tiny Layer - v1.0.0
- * https://github.com/floriancapelle/jquery-tiny-layer
+/*! jQuery FlexModal - v0.1.0
+ * https://github.com/floriancapelle/jquery-flex-modal
  * Licensed MIT
  */
 (function ( root, factory ) {
@@ -17,18 +17,18 @@
     var api = {};
 
     /* Configuration
-     * @see https://github.com/floriancapelle/jquery-tiny-layer/blob/master/README.md for configuration details
+     * @see https://github.com/floriancapelle/jquery-flex-modal/blob/master/README.md for configuration details
      */
     var conf = {
-        triggerSelector: '[data-layer-target]',
-        triggerTargetKey: 'layerTarget',
-        layerItemClass: 'tiny-layer-item',
-        layerItemContentClass: 'tiny-layer-item__content',
-        layerItemCloseClass: 'tiny-layer-item__close',
-        layerItemTpl: '<article class="tiny-layer-item"><div class="tiny-layer-item__content"></div></article>',
-        visibilityToggleClass: 'tiny-layer-item--visible',
-        layerOptions: {
-            closeBtnMarkup: '<button class="tiny-layer-item__close" type="button">x</button>',
+        triggerSelector: '[data-modal-target]',
+        triggerTargetKey: 'modalTarget',
+        modalItemClass: 'tiny-modal-item',
+        modalItemContentClass: 'tiny-modal-item__content',
+        modalItemCloseClass: 'tiny-modal-item__close',
+        modalItemTpl: '<article class="tiny-modal-item"><div class="tiny-modal-item__content"></div></article>',
+        visibilityToggleClass: 'tiny-modal-item--visible',
+        modalOptions: {
+            closeBtnMarkup: '<button class="tiny-modal-item__close" type="button">x</button>',
             autoCloseOthers: true,
             closeOnOverlayClick: true,
             closeOnEscKey: true,
@@ -38,8 +38,8 @@
         }
     };
     var $root;
-    var EVENT_NS = '.tinyLayer';
-    var CLASS_MODIFIER_HIDDEN = 'tiny-layer-hide';
+    var EVENT_NS = '.flexModal';
+    var CLASS_MODIFIER_HIDDEN = 'flex-modal-hide';
 
     /**
      * Initialize the component
@@ -48,181 +48,181 @@
     function init() {
         // create wrapper and append to configured element
         var $body = $('body');
-        $root = $('<aside class="tiny-layer"></aside>');
+        $root = $('<aside class="tiny-modal"></aside>');
 
         // append wrapper to body
         $body.append($root);
 
         // trigger event handling
-        // open target layer on click on a trigger
+        // open target modal on click on a trigger
         $body.on('click' + EVENT_NS, function( event ) {
             var $trigger = $(event.target);
-            var layerId;
+            var modalId;
 
             if ( !$trigger.is(conf.triggerSelector) ) return;
 
             if ( typeof conf.triggerTargetKey === 'function' ) {
-                layerId = conf.triggerTargetKey().call($trigger, event);
+                modalId = conf.triggerTargetKey().call($trigger, event);
             } else {
-                layerId = $trigger.data(conf.triggerTargetKey);
+                modalId = $trigger.data(conf.triggerTargetKey);
             }
 
-            // stop if the layer already has been added
-            if ( getLayerInRoot(layerId).length ) return;
+            // stop if the modal already has been added
+            if ( getModalInRoot(modalId).length ) return;
 
-            initLayer(layerId);
-            open(layerId);
+            initModal(modalId);
+            open(modalId);
         });
 
         // esc key handling
         $(document).on('keydown' + EVENT_NS, function( event ) {
             if ( event.keyCode !== 27 ) return;
 
-            // close all visible layers if the escape key has been pressed
+            // close all visible modals if the escape key has been pressed
             $root.children('.' + conf.visibilityToggleClass).each(function() {
-                var $layer = $(this);
+                var $modal = $(this);
 
-                // close layer if the option is set correctly
-                if ( $layer.data('options').closeOnEscKey === true ) {
-                    close($layer.data('id'));
+                // close modal if the option is set correctly
+                if ( $modal.data('options').closeOnEscKey === true ) {
+                    close($modal.data('id'));
                 }
             });
         });
 
-        // layer item event handling
+        // modal item event handling
         $root.on('click' + EVENT_NS, function( event ) {
             var $evtTarget = $(event.target);
 
-            // close layer on click on overlay
-            if ( $evtTarget.hasClass(conf.layerItemClass) ) {
+            // close modal on click on overlay
+            if ( $evtTarget.hasClass(conf.modalItemClass) ) {
                 if ( $evtTarget.data('options').closeOnOverlayClick !== true ) return;
                 close($evtTarget.data('id'));
             }
-            // close layer on click on close btn
-            else if ( $evtTarget.hasClass(conf.layerItemCloseClass) || $evtTarget.closest('.' + conf.layerItemCloseClass).length ) {
-                close($evtTarget.closest('.' + conf.layerItemClass).data('id'));
+            // close modal on click on close btn
+            else if ( $evtTarget.hasClass(conf.modalItemCloseClass) || $evtTarget.closest('.' + conf.modalItemCloseClass).length ) {
+                close($evtTarget.closest('.' + conf.modalItemClass).data('id'));
             }
         });
     }
 
     /**
-     * Initialize a layer by copying the source layer content and appending it to a new layer
-     * @param layerId - layer id like '#layer', will be used as jQuery selector
+     * Initialize a modal by copying the source modal content and appending it to a new modal
+     * @param modalId - modal id like '#modal', will be used as jQuery selector
      * @returns {boolean} - whether the initialization was successful or not
      */
-    function initLayer( layerId ) {
-        if ( !layerId ) return false;
+    function initModal( modalId ) {
+        if ( !modalId ) return false;
 
-        var $sourceLayer = $(layerId);
-        if ( !$sourceLayer || !$sourceLayer.length ) return false;
+        var $sourceModal = $(modalId);
+        if ( !$sourceModal || !$sourceModal.length ) return false;
 
-        var layerContent = $sourceLayer.html();
-        if ( typeof layerContent === 'undefined' ) return false;
+        var modalContent = $sourceModal.html();
+        if ( typeof modalContent === 'undefined' ) return false;
 
-        // create a new layer item
-        var $newLayer = $(conf.layerItemTpl);
-        var $newLayerContent = $newLayer.children('.' + conf.layerItemContentClass);
-        // merge options with defaults and options on the source layer tag if defined
+        // create a new modal item
+        var $newModal = $(conf.modalItemTpl);
+        var $newModalContent = $newModal.children('.' + conf.modalItemContentClass);
+        // merge options with defaults and options on the source modal tag if defined
         // like: data-close-btn-markup="false" => closeBtnMarkup: false
-        var options = $.extend(true, {}, conf.layerOptions, $sourceLayer.data());
+        var options = $.extend(true, {}, conf.modalOptions, $sourceModal.data());
 
         // set id and options for later use
-        $newLayer.data('id', layerId);
-        $newLayer.data('options', options);
+        $newModal.data('id', modalId);
+        $newModal.data('options', options);
         // append the source markup to the new item content
-        $newLayerContent.append(layerContent);
+        $newModalContent.append(modalContent);
 
         if ( options.closeBtnMarkup ) {
-            $newLayerContent.append($(options.closeBtnMarkup));
+            $newModalContent.append($(options.closeBtnMarkup));
         }
-        // copy all classes from target layer to new layer item
+        // copy all classes from target modal to new modal item
         // except the hide class
-        $newLayer.addClass($sourceLayer.attr('class').replace(CLASS_MODIFIER_HIDDEN, ''));
+        $newModal.addClass($sourceModal.attr('class').replace(CLASS_MODIFIER_HIDDEN, ''));
 
-        $root.append($newLayer);
-        options.onCreate.call($newLayer, api);
+        $root.append($newModal);
+        options.onCreate.call($newModal, api);
 
         return true;
     }
 
     /**
-     * open a layer
-     * @param {string} layerId
+     * open a modal
+     * @param {string} modalId
      * @returns {{}}
      */
-    function open( layerId ) {
-        layerId = layerId || '';
+    function open( modalId ) {
+        modalId = modalId || '';
 
-        var $layer = getLayerInRoot(layerId);
-        // if the layer is not initialized yet, do it and open it afterwards
-        if ( !$layer || !$layer.length ) {
-            if ( initLayer(layerId) === true ) {
-                open(layerId);
+        var $modal = getModalInRoot(modalId);
+        // if the modal is not initialized yet, do it and open it afterwards
+        if ( !$modal || !$modal.length ) {
+            if ( initModal(modalId) === true ) {
+                open(modalId);
             }
             return api;
         }
 
-        var options = $layer.data('options');
+        var options = $modal.data('options');
 
         if ( options.autoCloseOthers === true ) {
-            // close every child layer that's visible
+            // close every child modal that's visible
             $root.children(conf.visibilityToggleClass).each(function() {
                 close($(this).data('id'));
             });
         }
 
         // force layout, to enable css transitions
-        $layer.width();
-        $layer.addClass(conf.visibilityToggleClass);
-        options.onOpen.call($layer, api);
+        $modal.width();
+        $modal.addClass(conf.visibilityToggleClass);
+        options.onOpen.call($modal, api);
 
         return api;
     }
 
     /**
-     * Close and remove a layer or all layers if no layer id has been supplied
-     * @param {string} [layerId]
+     * Close and remove a modal or all modals if no modal id has been supplied
+     * @param {string} [modalId]
      * @returns {{}}
      */
-    function close( layerId ) {
-        var $layer;
+    function close( modalId ) {
+        var $modal;
 
-        if ( layerId ) {
-            $layer = getLayerInRoot(layerId);
-            if ( !$layer.length ) return api;
+        if ( modalId ) {
+            $modal = getModalInRoot(modalId);
+            if ( !$modal.length ) return api;
         } else {
-            $layer = $root.children();
+            $modal = $root.children();
         }
 
-        var options = $layer.data('options');
+        var options = $modal.data('options');
 
-        // wait for transitionend event to remove the layer
-        $layer.on('transitionend' + EVENT_NS + ' webkitTransitionEnd' + EVENT_NS, function( event ) {
-            if ( !$layer.is(event.target) ) return;
-            $layer.remove();
+        // wait for transitionend event to remove the modal
+        $modal.on('transitionend' + EVENT_NS + ' webkitTransitionEnd' + EVENT_NS, function( event ) {
+            if ( !$modal.is(event.target) ) return;
+            $modal.remove();
         });
-        $layer.removeClass(conf.visibilityToggleClass);
-        options.onClose.call($layer, api);
+        $modal.removeClass(conf.visibilityToggleClass);
+        options.onClose.call($modal, api);
 
         return api;
     }
 
     /**
-     * Get layer element by id in wrapper, match layerId with data property
-     * @param {string} layerId
+     * Get modal element by id in wrapper, match modalId with data property
+     * @param {string} modalId
      * @returns {*|HTMLElement}
      */
-    function getLayerInRoot( layerId ) {
-        var $layer = $();
+    function getModalInRoot( modalId ) {
+        var $modal = $();
 
         $root.children().each(function() {
-            if ( $(this).data('id') === layerId ) {
-                $layer = $(this);
+            if ( $(this).data('id') === modalId ) {
+                $modal = $(this);
                 return false;
             }
         });
 
-        return $layer;
+        return $modal;
     }
 
 
@@ -236,6 +236,6 @@
         init();
 
         // expose public api as soon as the document is ready
-        $.tinyLayer = api;
+        $.flexModal = api;
     });
 }));
