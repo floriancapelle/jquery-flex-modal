@@ -6,6 +6,7 @@ Open a modal by clicking any element you want which has a custom attribute conta
 - Modal is positioned with flexbox
 - CSS & HTML is fully customizable
 - Super simple API and configuration
+- No inline styles, plain CSS
 - Requires jQuery 2+
 - Browser Support: Evergreen browsers & IE9+
 
