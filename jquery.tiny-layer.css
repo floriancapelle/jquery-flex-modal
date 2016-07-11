@@ -1,0 +1,46 @@
+/* set this class to hide layers on pageload */
+/* use your existing modifiers if you can */
+.tiny-layer-hide {
+    display: none;
+}
+
+.tiny-layer-item {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, .2);
+    z-index: 10000;
+    /* transition-duration required to properly fire transitionend event */
+    transition: opacity 0.01s;
+    opacity: 0;
+}
+.tiny-layer-item--visible {
+    opacity: 1;
+}
+
+.tiny-layer-item__content {
+    position: relative;
+    min-width: 250px;
+    padding: 30px 40px 30px 30px;
+    border-radius: 3px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .25);
+    background: #fff;
+}
+.tiny-layer-item__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: #333;
+    font-size: 12px;
+    background-color: #ebebeb;
+    border: 0;
+    border-radius: 3px;
+}
