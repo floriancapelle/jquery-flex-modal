@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>jQuery TinyLayer - Demo page</title>
+    <title>jQuery FlexModal - Demo page</title>
 
-    <link rel="stylesheet" href="jquery.tiny-layer.css">
+    <link rel="stylesheet" href="jquery.flex-modal.css">
 
     <style>
         /* Demo css */
@@ -62,36 +62,36 @@
 <body>
 
     <main class="page-content">
-        <h1>jQuery TinyLayer Demo</h1>
+        <h1>jQuery FlexModal Demo</h1>
 
         <div class="btn-wrap">
-            <button class="btn btn-default" type="button" data-layer-target="#layer-1">Simple Layer</button>
-            <button class="btn btn-default" type="button" data-layer-target="#layer-2">Modal-like layer</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-1">Simple Notification</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-2">Simple Modal</button>
         </div>
     </main>
 
-    <div id="layer-1" class="layer-1 tiny-layer-hide">
-        <h3>Simple Layer</h3>
+    <div id="modal-1" class="modal-1 flex-modal-hide">
+        <h3>Simple Notification</h3>
         <p>with <b>custom</b> markup and styling</p>
     </div>
 
-    <div id="layer-2" class="layer-2 tiny-layer-hide" data-close-on-overlay-click="false" data-close-on-esc-key="false" data-close-btn-markup="false">
-        <h3>Modal-like layer</h3>
-        <p>custom events delegated on the layer</p>
-        <button class="btn btn-default" type="button">Close layer</button>
+    <div id="modal-2" class="modal-2 flex-modal-hide" data-close-on-overlay-click="false" data-close-on-esc-key="false" data-close-btn-markup="false">
+        <h3>Simple Modal</h3>
+        <p>custom events delegated on the modal</p>
+        <button class="btn btn-default" type="button">Close modal</button>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="jquery.tiny-layer.js"></script>
+    <script src="jquery.flex-modal.js"></script>
 
     <script>
         $(function( $ ) {
-            $('#layer-2').data({
+            $('#modal-2').data({
                 events: [
                     {'click': function( event ) {
                         if ( !$(event.target).is('button') ) return;
 
-                        $.tinyLayer.close('#layer-2');
+                        $.flexModal.close('#modal-2');
                     }}
                 ]
             });
