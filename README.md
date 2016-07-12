@@ -1,4 +1,7 @@
 # flexModal
+[![License](http://img.shields.io/:license-mit-blue.svg)](http://doge.mit-license.org)
+[![GitHub release](https://img.shields.io/github/release/floriancapelle/jquery-flex-modal.svg?maxAge=2592000)]()
+
 flexModal is a lightweight jQuery plugin for fully customizable basic notifications, modals, popups or any feature alike.
 
 Open a modal by clicking any element you want which has a custom attribute containing the id of the target modal.
@@ -12,7 +15,7 @@ Open a modal by clicking any element you want which has a custom attribute conta
 
 ## Demo
 
-Open the index.html for examples.
+![jQuery FlexModal Demo](https://raw.githubusercontent.com/floriancapelle/jquery-flex-modal/master/demo.gif)
 
 ## Install
 
@@ -32,7 +35,7 @@ Then, before your closing ```<body>``` tag add:
 
 ## Usage
 
-See the demo page for examples.
+See the index.html for examples.
 
 ### API
 

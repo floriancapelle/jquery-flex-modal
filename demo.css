@@ -1,0 +1,98 @@
+html {
+    font-family: Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    height: 100%;
+    background-color: #f2f2f2;
+    overflow-y: scroll;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+body {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.page-content {
+    margin-top: -10%;
+    text-align: center;
+}
+
+.btn-wrap {
+    margin-top: 3em;
+}
+.btn {
+    display: inline-block;
+    position: relative;
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    text-decoration: none;
+    border-radius: 3px;
+    border: 0;
+    cursor: pointer;
+    /* Disables the default callout shown when you touch and hold a touch target  */
+    -webkit-touch-callout: none;
+    -ms-touch-action: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+.btn-default {
+    color: #fff;
+    background: #002b47;
+}
+.btn-default:focus,
+.btn-default:hover {
+    outline: none;
+    background: #003A61;
+}
+
+/* modals */
+.modal-1 .flex-modal-item__content {
+    text-align: center;
+}
+
+.modal-2 .flex-modal-item__content {
+    max-width: 400px;
+    text-align: center;
+}
+.modal-2 .flex-modal-item__content ul {
+    text-align: left;
+}
+
+.modal-4 {
+    transition: opacity .4s;
+}
+.modal-4 .flex-modal-item__content {
+    transition: transform .4s;
+    transform: translateY(100px);
+}
+.modal-4.flex-modal-item--visible .flex-modal-item__content {
+    transform: translateY(0);
+}
+
+.modal-5 {
+    bottom: auto;
+    background-color: transparent;
+    transition: opacity .3s;
+}
+.modal-5 .flex-modal-item__content {
+    width: 100%;
+    margin: 0;
+    color: #f00;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 0;
+}
+.modal-5 .flex-modal-item__close {
+    background-color: #f00;
+    color: #fff;
+}
