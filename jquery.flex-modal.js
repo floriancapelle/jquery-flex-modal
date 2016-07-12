@@ -166,7 +166,7 @@
 
         if ( options.autoCloseOthers === true ) {
             // close every child modal that's visible
-            $root.children(conf.visibilityToggleClass).each(function() {
+            $root.children('.' + conf.visibilityToggleClass).each(function() {
                 close($(this).data('id'));
             });
         }

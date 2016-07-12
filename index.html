@@ -31,7 +31,7 @@
         }
 
         .page-content {
-            margin-top: -5%;
+            margin-top: -10%;
             text-align: center;
         }
 
@@ -68,20 +68,45 @@
         }
 
         /* modals */
-        .modal-1 .tiny-layer-item__content {
+        .modal-1 .flex-modal-item__content {
             text-align: center;
         }
 
-        .modal-2 .tiny-layer-item__content {
+        .modal-2 .flex-modal-item__content {
             max-width: 400px;
             text-align: center;
         }
-        .modal-2 .tiny-layer-item__content ul {
+        .modal-2 .flex-modal-item__content ul {
             text-align: left;
         }
 
-        .modal-3 .loading {
+        .modal-4 {
+            transition: opacity .4s;
+        }
+        .modal-4 .flex-modal-item__content {
+            transition: transform .4s;
+            transform: translateY(100px);
+        }
+        .modal-4.flex-modal-item--visible .flex-modal-item__content {
+            transform: translateY(0);
+        }
+
+        .modal-5 {
+            bottom: auto;
+            background-color: transparent;
+            transition: opacity .3s;
+        }
+        .modal-5 .flex-modal-item__content {
+            width: 100%;
+            margin: 0;
+            color: #f00;
+            font-weight: bold;
             text-align: center;
+            border-radius: 0;
+        }
+        .modal-5 .flex-modal-item__close {
+            background-color: #f00;
+            color: #fff;
         }
     </style>
 </head>
@@ -94,6 +119,8 @@
             <button class="btn btn-default" type="button" data-modal-target="#modal-1">Simple</button>
             <button class="btn btn-default" type="button" data-modal-target="#modal-2">Confirmation</button>
             <button class="btn btn-default" type="button" data-modal-target="#modal-3">Ajax</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-4">Animations</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-5">Alert</button>
         </div>
     </main>
 
@@ -113,6 +140,16 @@
 
     <div id="modal-3" class="modal-3 flex-modal-hide">
         <h3>Ajax</h3>
+    </div>
+
+    <div id="modal-4" class="modal-4 flex-modal-hide">
+        <h3>Animations</h3>
+        <p>open and close modals with an animation in pure css or javascript if you want.</p>
+    </div>
+
+    <div id="modal-5" class="modal-5 flex-modal-hide">
+        <h3>Alert</h3>
+        <p>You are being alerted.</p>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
