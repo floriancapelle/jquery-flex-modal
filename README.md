@@ -1,6 +1,7 @@
 # flexModal
 [![license](https://img.shields.io/github/license/floriancapelle/jquery-flex-modal.svg?style=flat-square&maxAge=3600)](https://github.com/floriancapelle/jquery-flex-modal/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/floriancapelle/jquery-flex-modal.svg?style=flat-square&maxAge=3600)](https://github.com/floriancapelle/jquery-flex-modal/releases)
+[![Code Climate](https://codeclimate.com/github/floriancapelle/jquery-flex-modal/badges/gpa.svg)](https://codeclimate.com/github/floriancapelle/jquery-flex-modal)
 
 
 flexModal is a lightweight jQuery plugin for fully customizable basic notifications, modals, popups or any feature alike.
