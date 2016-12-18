@@ -21,7 +21,7 @@ Open a modal by clicking any element you want which has a custom attribute conta
 
 ## Install
 
-Download latest release and place the following css and js files in the corresponding directories.
+Download latest release and place the following css and js files in the proper directories.
 
 Add a link to the css file in your `<head>`:
 ```html
