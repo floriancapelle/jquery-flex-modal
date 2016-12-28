@@ -65,8 +65,14 @@
                 $(this).on('open.flexModal', function() {
                     console.log('open event triggered');
                 });
+                $(this).on('afterOpen.flexModal', function() {
+                    console.log('afterOpen event triggered');
+                });
                 $(this).on('close.flexModal', function() {
                     console.log('close event triggered');
+                });
+                $(this).on('afterClose.flexModal', function() {
+                    console.log('afterClose event triggered');
                 });
             });
 
