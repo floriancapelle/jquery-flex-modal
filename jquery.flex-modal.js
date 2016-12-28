@@ -172,6 +172,14 @@
             });
         }
 
+        // wait for transitionend event to remove the ready class
+        $modal.on('transitionend.open.' + EVENT_NS + ' webkitTransitionEnd.open.' + EVENT_NS, function( event ) {
+            if ( !$modal.is(event.target) ) return;
+
+            $modal.trigger('afterOpen.' + EVENT_NS, api);
+            $modal.off('.open.' + EVENT_NS);
+        });
+
         $modal.addClass(CLASS_MODAL_ITEM_MODIFIER_READY);
         // force layout, to enable css transitions
         $modal.width();
@@ -203,6 +211,7 @@
             if ( !$modal.is(event.target) ) return;
 
             $modal.removeClass(CLASS_MODAL_ITEM_MODIFIER_READY);
+            $modal.trigger('afterClose.' + EVENT_NS, api);
             $modal.off('.close.' + EVENT_NS);
         });
 

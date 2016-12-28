@@ -66,6 +66,12 @@ modalOptions.autoCloseOthers | boolean | true | close other open modals when ope
 modalOptions.closeOnOverlayClick | boolean | true | close this modal when its overlay was clicked
 modalOptions.closeOnEscKey | boolean | true | close this modal when the escape key was pressed
 
+### Events
+
+jQuery events on the modals will be fired when:
+- 'close.flexModal' = a modal is closing/hiding
+- 'open.flexModal' = a modal is opening/showing 
+
 ## License
 
 [MIT License](https://github.com/floriancapelle/jquery-flex-modal/blob/master/LICENSE)
