@@ -27,14 +27,11 @@
             closeBtnMarkup: '<button class="flex-modal-item__close" type="button">x</button>',
             autoCloseOthers: true,
             closeOnOverlayClick: true,
-            closeOnEscKey: true,
-            onCreate: function() {},
-            onOpen: function() {},
-            onClose: function() {}
+            closeOnEscKey: true
         }
     };
     var $root;
-    var EVENT_NS = '.flexModal';
+    var EVENT_NS = 'flexModal';
     var CLASS_MODIFIER_HIDDEN = 'flex-modal-hide';
     var CLASS_MODAL_ITEM = 'flex-modal-item';
     var CLASS_MODAL_ITEM_CONTENT = 'flex-modal-item__content';
@@ -55,7 +52,7 @@
 
         // trigger event handling
         // open target modal on click on a trigger
-        $body.on('click' + EVENT_NS, function( event ) {
+        $body.on('click.' + EVENT_NS, function( event ) {
             var $trigger = $(event.target);
             var modalId;
 
@@ -71,7 +68,7 @@
         });
 
         // esc key handling
-        $(document).on('keydown' + EVENT_NS, function( event ) {
+        $(document).on('keydown.' + EVENT_NS, function( event ) {
             if ( event.keyCode !== 27 ) return;
 
             // close all visible modals if the escape key has been pressed
@@ -86,7 +83,7 @@
         });
 
         // modal item event handling
-        $root.on('click' + EVENT_NS, function( event ) {
+        $root.on('click.' + EVENT_NS, function( event ) {
             var $evtTarget = $(event.target);
 
             // close modal on click on overlay
@@ -102,18 +99,21 @@
     }
 
     /**
-     * Initialize a modal by copying the source modal content and appending it to a new modal
-     * @param modalId - modal id like '#modal', will be used as jQuery selector
+     * Add a modal by appending the source modal content to a new modal item.
+     * Fire callback after the modal has been initialized, if supplied.
+     * @param {string} modalId - modal id like '#modal', will be used as jQuery selector
+     * @param {function} [cb] - callback to run when modal has been initialized, 'this' will be modal
      * @returns {boolean} - whether the initialization was successful or not
      */
-    function addModal( modalId ) {
-        if ( !modalId ) return false;
+    function addModal( modalId, cb ) {
+        modalId = modalId || '';
+        modalId = sanitizeId(modalId);
 
-        var $sourceModal = $(modalId);
-        if ( !$sourceModal || !$sourceModal.length ) return false;
+        var $sourceModal = $('#'+ modalId);
+        if ( !$sourceModal.length ) return false;
 
         var modalContent = $sourceModal.html();
-        if ( typeof modalContent === 'undefined' ) return false;
+        if ( modalContent === undefined ) return false;
 
         // create a new modal item
         var $newModal = $(MODAL_ITEM_TPL);
@@ -123,7 +123,7 @@
         var options = $.extend(true, {}, conf.modalOptions, $sourceModal.data());
 
         // set id and options for later use
-        $newModal.data('id', modalId);
+        $newModal.attr('id', modalId);
         $newModal.data('options', options);
         // append the source markup to the new item content
         $newModalContent.append(modalContent);
@@ -135,23 +135,27 @@
         // except the hide class
         $newModal.addClass($sourceModal.attr('class').replace(CLASS_MODIFIER_HIDDEN, ''));
 
+        $sourceModal.remove();
         $root.append($newModal);
-        options.onCreate.call($newModal, api);
+        if ( cb ) {
+            cb.call($newModal[0], api);
+        }
 
         return true;
     }
 
     /**
      * open a modal
-     * @param {string} modalId
+     * @param {string} modalId - with or without leading hash supported
      * @returns {{}}
      */
     function open( modalId ) {
         modalId = modalId || '';
+        modalId = sanitizeId(modalId);
 
-        var $modal = getModalInRoot(modalId);
+        var $modal = $root.children('#' + modalId);
         // if the modal is not initialized yet, do it and open it afterwards
-        if ( !$modal || !$modal.length ) {
+        if ( !$modal.length ) {
             if ( addModal(modalId) === true ) {
                 open(modalId);
             }
@@ -163,14 +167,14 @@
         if ( options.autoCloseOthers === true ) {
             // close every child modal that's visible
             $root.children('.' + conf.visibilityToggleClass).each(function() {
-                close($(this).data('id'));
+                close($(this).attr('id'));
             });
         }
 
         // force layout, to enable css transitions
         $modal.width();
         $modal.addClass(conf.visibilityToggleClass);
-        options.onOpen.call($modal, api);
+        $modal.trigger('open.' + EVENT_NS, api);
 
         return api;
     }
@@ -183,47 +187,29 @@
     function close( modalId ) {
         var $modal;
 
-        if ( modalId ) {
-            $modal = getModalInRoot(modalId);
-            if ( !$modal.length ) return api;
-        } else {
+        if ( modalId === undefined ) {
             $modal = $root.children();
+        } else {
+            modalId = sanitizeId(modalId);
+
+            $modal = $root.children('#' + modalId);
+            if ( !$modal.length ) return api;
         }
 
-        var options = $modal.data('options');
-
-        // wait for transitionend event to remove the modal
-        $modal.on('transitionend' + EVENT_NS + ' webkitTransitionEnd' + EVENT_NS, function( event ) {
-            if ( !$modal.is(event.target) ) return;
-            $modal.remove();
-        });
         $modal.removeClass(conf.visibilityToggleClass);
-        options.onClose.call($modal, api);
+        $modal.trigger('close.' + EVENT_NS, api);
 
         return api;
     }
 
-    /**
-     * Get modal element by id in wrapper, match modalId with data property
-     * @param {string} modalId
-     * @returns {*|HTMLElement}
-     */
-    function getModalInRoot( modalId ) {
-        var $modal = $();
-
-        $root.children().each(function() {
-            if ( $(this).data('id') === modalId ) {
-                $modal = $(this);
-                return false;
-            }
-        });
-
-        return $modal;
+    function sanitizeId( id ) {
+        return id.slice(0, 1) === '#' ? id.slice(1) : id;
     }
 
 
     $.extend(api, {
         config: conf,
+        add: addModal,
         open: open,
         close: close
     });

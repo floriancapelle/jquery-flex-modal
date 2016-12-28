@@ -56,26 +56,30 @@
 
     <script>
         $(function( $ ) {
-            $('#modal-2').data({
-                onCreate: function( api ) {
-                    $(this).on('click', 'button', function() {
-                        api.close('#modal-2');
-                    });
-                }
+            $.flexModal.add('#modal-2', function( api ) {
+                $(this).on('click', 'button', function() {
+                    api.close('#modal-2');
+                });
+
+                // Demo events
+                $(this).on('open.flexModal', function() {
+                    console.log('open event triggered');
+                });
+                $(this).on('close.flexModal', function() {
+                    console.log('close event triggered');
+                });
             });
 
-            $('#modal-3').data({
-                onCreate: function( api ) {
-                    var $modalContent = $(this).children();
+            $.flexModal.add('#modal-3', function( api ) {
+                var $modalContent = $(this).children();
 
-                    $.ajax({
-                        url: 'ajax-content.html',
-                        cache: false,
-                        success: function( data ) {
-                            $modalContent.append(data);
-                        }
-                    });
-                }
+                $.ajax({
+                    url: 'ajax-content.html',
+                    cache: false,
+                    success: function( data ) {
+                        $modalContent.append(data);
+                    }
+                });
             });
         });
     </script>

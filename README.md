@@ -65,9 +65,6 @@ modalOptions.closeBtnMarkup | string | see js file | markup of the close button 
 modalOptions.autoCloseOthers | boolean | true | close other open modals when opening this modal
 modalOptions.closeOnOverlayClick | boolean | true | close this modal when its overlay was clicked
 modalOptions.closeOnEscKey | boolean | true | close this modal when the escape key was pressed
-modalOptions.onCreate | function | no-op | callback, fires after modal item creation
-modalOptions.onOpen | function | no-op | callback, fires when the modal item has been opened
-modalOptions.onClose | function | no-op | callback, fires when the modal item is being closed 
 
 ## License
 
