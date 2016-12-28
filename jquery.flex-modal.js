@@ -32,8 +32,9 @@
     };
     var $root;
     var EVENT_NS = 'flexModal';
-    var CLASS_MODIFIER_HIDDEN = 'flex-modal-hide';
+    var CLASS_MODAL_ITEM_HIDDEN = 'flex-modal-hide';
     var CLASS_MODAL_ITEM = 'flex-modal-item';
+    var CLASS_MODAL_ITEM_MODIFIER_READY = 'flex-modal-item--ready';
     var CLASS_MODAL_ITEM_CONTENT = 'flex-modal-item__content';
     var CLASS_MODAL_ITEM_CLOSE = 'flex-modal-item__close';
     var MODAL_ITEM_TPL = '<article class="flex-modal-item"><div class="flex-modal-item__content"></div></article>';
@@ -133,7 +134,7 @@
         }
         // copy all classes from target modal to new modal item
         // except the hide class
-        $newModal.addClass($sourceModal.attr('class').replace(CLASS_MODIFIER_HIDDEN, ''));
+        $newModal.addClass($sourceModal.attr('class').replace(CLASS_MODAL_ITEM_HIDDEN, ''));
 
         $sourceModal.remove();
         $root.append($newModal);
@@ -171,6 +172,7 @@
             });
         }
 
+        $modal.addClass(CLASS_MODAL_ITEM_MODIFIER_READY);
         // force layout, to enable css transitions
         $modal.width();
         $modal.addClass(conf.visibilityToggleClass);
@@ -195,6 +197,14 @@
             $modal = $root.children('#' + modalId);
             if ( !$modal.length ) return api;
         }
+
+        // wait for transitionend event to remove the ready class
+        $modal.on('transitionend.close.' + EVENT_NS + ' webkitTransitionEnd.close.' + EVENT_NS, function( event ) {
+            if ( !$modal.is(event.target) ) return;
+
+            $modal.removeClass(CLASS_MODAL_ITEM_MODIFIER_READY);
+            $modal.off('.close.' + EVENT_NS);
+        });
 
         $modal.removeClass(conf.visibilityToggleClass);
         $modal.trigger('close.' + EVENT_NS, api);

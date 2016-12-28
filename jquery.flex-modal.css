@@ -10,18 +10,20 @@
     top: 0;
     right: 0;
     bottom: 0;
-    display: flex;
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, .2);
     z-index: 10000;
-    transition: opacity .1s;
     opacity: 0;
-    visibility: hidden;
+    display: none;
+    /* make sure to use at least tiny transition-duration so a transitionend event can fire */
+    transition: opacity .1s;
+}
+.flex-modal-item--ready {
+    display: flex;
 }
 .flex-modal-item--visible {
     opacity: 1;
-    visibility: visible;
 }
 
 .flex-modal-item__content {
