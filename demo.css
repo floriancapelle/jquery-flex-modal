@@ -72,8 +72,8 @@ body {
     transition: opacity .4s;
 }
 .modal-4 .flex-modal-item__content {
-    transition: transform .4s;
-    transform: translateY(100px);
+    transition: transform .5s cubic-bezier(0.610, 0.405, 0.325, 1.165);
+    transform: translateY(200px);
 }
 .modal-4.flex-modal-item--visible .flex-modal-item__content {
     transform: translateY(0);
