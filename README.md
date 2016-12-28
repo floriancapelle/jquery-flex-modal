@@ -53,16 +53,13 @@ close | [modalId : string (e.g. '#modal-1')] | close the target modal or all mod
 Modify `$.flexModal.config` to change the configuration anytime.
 
 All `modalOptions` can also be set via data-attributes on the modal element.
+
 See the demo for examples.
 
 Key | Type | Default | Description
 ------ | ---- | ------- | -----------
 triggerSelector | string | '[data-modal-target]' | used as filter selector in click event delegation for body
 triggerTargetKey | string|function | 'modalTarget' | data object key containing modal id on trigger element. Or use function (context is trigger element and param is event object)
-modalItemClass | string | 'flex-modal-item' | -
-modalItemContentClass | string | 'flex-modal-item__content' | -
-modalItemCloseClass | string | 'flex-modal-item__close' | -
-modalItemTpl | string | see js file | used to create modal items with jQuery
 visibilityToggleClass | string | 'is-visible' | css class for open and close handling
 modalOptions.closeBtnMarkup | string | see js file | markup of the close button to be appended, false if not
 modalOptions.autoCloseOthers | boolean | true | close other open modals when opening this modal

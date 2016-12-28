@@ -22,10 +22,6 @@
     var conf = {
         triggerSelector: '[data-modal-target]',
         triggerTargetKey: 'modalTarget',
-        modalItemClass: 'flex-modal-item',
-        modalItemContentClass: 'flex-modal-item__content',
-        modalItemCloseClass: 'flex-modal-item__close',
-        modalItemTpl: '<article class="flex-modal-item"><div class="flex-modal-item__content"></div></article>',
         visibilityToggleClass: 'flex-modal-item--visible',
         modalOptions: {
             closeBtnMarkup: '<button class="flex-modal-item__close" type="button">x</button>',
@@ -40,9 +36,13 @@
     var $root;
     var EVENT_NS = '.flexModal';
     var CLASS_MODIFIER_HIDDEN = 'flex-modal-hide';
+    var CLASS_MODAL_ITEM = 'flex-modal-item';
+    var CLASS_MODAL_ITEM_CONTENT = 'flex-modal-item__content';
+    var CLASS_MODAL_ITEM_CLOSE = 'flex-modal-item__close';
+    var MODAL_ITEM_TPL = '<article class="flex-modal-item"><div class="flex-modal-item__content"></div></article>';
 
     /**
-     * Initialize the component
+     * Initialize the plugin
      * @returns {{}}
      */
     function init() {
@@ -67,10 +67,6 @@
                 modalId = $trigger.data(conf.triggerTargetKey);
             }
 
-            // stop if the modal already has been added
-            if ( getModalInRoot(modalId).length ) return;
-
-            initModal(modalId);
             open(modalId);
         });
 
@@ -84,7 +80,7 @@
 
                 // close modal if the option is set correctly
                 if ( $modal.data('options').closeOnEscKey === true ) {
-                    close($modal.data('id'));
+                    close($modal.attr('id'));
                 }
             });
         });
@@ -94,13 +90,13 @@
             var $evtTarget = $(event.target);
 
             // close modal on click on overlay
-            if ( $evtTarget.hasClass(conf.modalItemClass) ) {
+            if ( $evtTarget.hasClass(CLASS_MODAL_ITEM) ) {
                 if ( $evtTarget.data('options').closeOnOverlayClick !== true ) return;
-                close($evtTarget.data('id'));
+                close($evtTarget.attr('id'));
             }
             // close modal on click on close btn
-            else if ( $evtTarget.hasClass(conf.modalItemCloseClass) || $evtTarget.closest('.' + conf.modalItemCloseClass).length ) {
-                close($evtTarget.closest('.' + conf.modalItemClass).data('id'));
+            else if ( $evtTarget.hasClass(CLASS_MODAL_ITEM_CLOSE) || $evtTarget.closest('.' + CLASS_MODAL_ITEM_CLOSE).length ) {
+                close($evtTarget.closest('.' + CLASS_MODAL_ITEM).attr('id'));
             }
         });
     }
@@ -110,7 +106,7 @@
      * @param modalId - modal id like '#modal', will be used as jQuery selector
      * @returns {boolean} - whether the initialization was successful or not
      */
-    function initModal( modalId ) {
+    function addModal( modalId ) {
         if ( !modalId ) return false;
 
         var $sourceModal = $(modalId);
@@ -120,8 +116,8 @@
         if ( typeof modalContent === 'undefined' ) return false;
 
         // create a new modal item
-        var $newModal = $(conf.modalItemTpl);
-        var $newModalContent = $newModal.children('.' + conf.modalItemContentClass);
+        var $newModal = $(MODAL_ITEM_TPL);
+        var $newModalContent = $newModal.children('.' + CLASS_MODAL_ITEM_CONTENT);
         // merge options with defaults and options on the source modal tag if defined
         // like: data-close-btn-markup="false" => closeBtnMarkup: false
         var options = $.extend(true, {}, conf.modalOptions, $sourceModal.data());
@@ -156,7 +152,7 @@
         var $modal = getModalInRoot(modalId);
         // if the modal is not initialized yet, do it and open it afterwards
         if ( !$modal || !$modal.length ) {
-            if ( initModal(modalId) === true ) {
+            if ( addModal(modalId) === true ) {
                 open(modalId);
             }
             return api;
