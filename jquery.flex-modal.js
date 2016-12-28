@@ -1,4 +1,4 @@
-/*! jQuery FlexModal - v0.2.1
+/*! jQuery FlexModal - v1.0.0
  * https://github.com/floriancapelle/jquery-flex-modal
  * Licensed MIT
  */
