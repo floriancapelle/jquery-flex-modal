@@ -20,6 +20,7 @@
             <button class="btn btn-default" type="button" data-modal-target="#modal-3">Ajax</button>
             <button class="btn btn-default" type="button" data-modal-target="#modal-4">Animations</button>
             <button class="btn btn-default" type="button" data-modal-target="#modal-5">Alert</button>
+            <button class="btn btn-default" type="button" data-modal-target="#modal-6">Content Overflow</button>
         </div>
     </main>
 
@@ -51,6 +52,13 @@
         <p>You are being alerted.</p>
     </div>
 
+    <div id="modal-6" class="modal-6 flex-modal-hide">
+        <h3>Content Overflow</h3>
+        <p>
+            Curabitur aliquet quam id dui posuere blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Sed porttitor lectus nibh. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Sed porttitor lectus nibh. Curabitur aliquet quam id dui posuere blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Sed porttitor lectus nibh. Curabitur aliquet quam id dui posuere blandit. Donec rutrum congue leo eget malesuada. Sed porttitor lectus nibh. Curabitur aliquet quam id dui posuere blandit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.
+        </p>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="jquery.flex-modal.js"></script>
 
@@ -77,7 +85,7 @@
             });
 
             $.flexModal.add('#modal-3', function( api ) {
-                var $modalContent = $(this).children();
+                var $modalContent = $(this).find('.flex-modal-item__content-inner');
 
                 $.ajax({
                     url: 'ajax-content.html',

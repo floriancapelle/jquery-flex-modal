@@ -41,18 +41,17 @@ See the index.html for examples.
 
 ### API
 
-Namespace is `$.flexModal`
+Accessible via `$.flexModal`
 
 Method | Arguments | Description
 ------ | -------- | -----------
-open | modalId : string (e.g. '#modal-1') | open the target modal
-close | [modalId : string (e.g. '#modal-1')] | close the target modal or all modals
+add | modalId : string (e.g. '#modal-1'), options : object/function | Add/Prepare the target modal. You may supply a callback function or an object for this modal only.
+open | modalId : string (e.g. '#modal-1') | Open the target modal
+close | [modalId : string (e.g. '#modal-1')] | Close the target modal or all modals
 
 ### Configuration
 
-Modify `$.flexModal.config` to change the configuration anytime.
-
-All `modalOptions` can also be set via data-attributes on the modal element.
+All `modalOptions` can also be set via data-attributes on the modal element and/or with an options object in the add method.
 
 See the demo for examples.
 
@@ -60,7 +59,6 @@ Key | Type | Default | Description
 ------ | ---- | ------- | -----------
 triggerSelector | string | '[data-modal-target]' | used as filter selector in click event delegation for body
 triggerTargetKey | string|function | 'modalTarget' | data object key containing modal id on trigger element. Or use function (context is trigger element and param is event object)
-visibilityToggleClass | string | 'is-visible' | css class for open and close handling
 modalOptions.closeBtnMarkup | string | see js file | markup of the close button to be appended, false if not
 modalOptions.autoCloseOthers | boolean | true | close other open modals when opening this modal
 modalOptions.closeOnOverlayClick | boolean | true | close this modal when its overlay was clicked
@@ -70,7 +68,9 @@ modalOptions.closeOnEscKey | boolean | true | close this modal when the escape k
 
 jQuery events on the modals will be fired when:
 - 'close.flexModal' = a modal is closing/hiding
+- 'afterClose.flexModal' = a modal has been closed/hidden
 - 'open.flexModal' = a modal is opening/showing 
+- 'afterOpen.flexModal' = a modal has been opened/shown
 
 ## License
 
