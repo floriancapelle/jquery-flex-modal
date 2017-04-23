@@ -45,7 +45,7 @@ Accessible via `$.flexModal`
 
 Method | Arguments | Description
 ------ | -------- | -----------
-add | modalId : string (e.g. '#modal-1'), options : object|function | Add/Prepare the target modal. You may supply a callback function or an object for this modal only.
+add | modalId : string (e.g. '#modal-1'), options : object/function | Add/Prepare the target modal. You may supply a callback function or an object for this modal only.
 open | modalId : string (e.g. '#modal-1') | Open the target modal
 close | [modalId : string (e.g. '#modal-1')] | Close the target modal or all modals
 
