@@ -28,12 +28,19 @@
 
 .flex-modal-item__content {
     position: relative;
+    display: flex;
     min-width: 200px;
+    max-width: 600px;
+    max-height: 90%;
     margin: 15px;
-    padding: 25px;
     border-radius: 3px;
     box-shadow: 0 1px 6px rgba(0, 0, 0, .25);
     background: #fff;
+}
+.flex-modal-item__content-inner {
+    padding: 25px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .flex-modal-item__close {
     position: absolute;
@@ -47,4 +54,14 @@
     background-color: #ebebeb;
     border: 0;
     border-radius: 3px;
+}
+
+@media ( min-width: 768px ) {
+    .flex-modal-item__content-inner {
+        padding: 30px 40px 30px 30px;
+    }
+    .flex-modal-item__close {
+        top: 20px;
+        right: 20px;
+    }
 }

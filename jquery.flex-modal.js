@@ -36,8 +36,9 @@
     var CLASS_MODAL_ITEM = 'flex-modal-item';
     var CLASS_MODAL_ITEM_MODIFIER_READY = 'flex-modal-item--ready';
     var CLASS_MODAL_ITEM_CONTENT = 'flex-modal-item__content';
+    var CLASS_MODAL_ITEM_CONTENT_INNER = 'flex-modal-item__content-inner';
     var CLASS_MODAL_ITEM_CLOSE = 'flex-modal-item__close';
-    var MODAL_ITEM_TPL = '<article class="flex-modal-item"><div class="flex-modal-item__content"></div></article>';
+    var MODAL_ITEM_TPL = '<article class="flex-modal-item"><div class="flex-modal-item__content"><div class="flex-modal-item__content-inner"></div></div></article>';
 
     /**
      * Initialize the plugin
@@ -127,7 +128,7 @@
         $newModal.attr('id', modalId);
         $newModal.data('options', options);
         // append the source markup to the new item content
-        $newModalContent.append(modalContent);
+        $newModalContent.children('.' + CLASS_MODAL_ITEM_CONTENT_INNER).append(modalContent);
 
         if ( options.closeBtnMarkup ) {
             $newModalContent.append($(options.closeBtnMarkup));

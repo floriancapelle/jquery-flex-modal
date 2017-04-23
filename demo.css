@@ -96,3 +96,7 @@ body {
     background-color: #f00;
     color: #fff;
 }
+
+.modal-6 .flex-modal-item__content {
+    max-height: 350px;
+}
