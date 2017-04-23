@@ -20,7 +20,7 @@
      * Configuration
      * @see https://github.com/floriancapelle/jquery-flex-modal/blob/master/README.md for configuration details
      */
-    var conf = {
+    var defaults = {
         triggerSelector: '[data-modal-target]',
         triggerTargetKey: 'modalTarget',
         modalOptions: {
@@ -56,15 +56,15 @@
             var $trigger = $(event.target);
             var modalId;
 
-            if ( !$trigger.is(conf.triggerSelector) ) return;
+            if ( !$trigger.is(defaults.triggerSelector) ) return;
 
-            if ( typeof conf.triggerTargetKey === 'function' ) {
-                modalId = conf.triggerTargetKey().call($trigger, event);
+            if ( typeof defaults.triggerTargetKey === 'function' ) {
+                modalId = defaults.triggerTargetKey().call($trigger, event);
             } else {
-                modalId = $trigger.data(conf.triggerTargetKey);
+                modalId = $trigger.data(defaults.triggerTargetKey);
             }
 
-            open(modalId);
+            moduleApi.open(modalId);
         });
 
         // esc key handling
@@ -77,7 +77,7 @@
 
                 // close modal if the option is set correctly
                 if ( $modal.data('options').closeOnEscKey === true ) {
-                    close($modal.attr('id'));
+                    moduleApi.close($modal.attr('id'));
                 }
             });
         });
@@ -89,11 +89,11 @@
             // close modal on click on overlay
             if ( $evtTarget.hasClass(CLASS_MODAL_ITEM) ) {
                 if ( $evtTarget.data('options').closeOnOverlayClick !== true ) return;
-                close($evtTarget.attr('id'));
+                moduleApi.close($evtTarget.attr('id'));
             }
             // close modal on click on close btn
             else if ( $evtTarget.hasClass(CLASS_MODAL_ITEM_CLOSE) || $evtTarget.closest('.' + CLASS_MODAL_ITEM_CLOSE).length ) {
-                close($evtTarget.closest('.' + CLASS_MODAL_ITEM).attr('id'));
+                moduleApi.close($evtTarget.closest('.' + CLASS_MODAL_ITEM).attr('id'));
             }
         });
 
@@ -101,31 +101,29 @@
         $.flexModal = moduleApi;
     });
 
-    var FlexModalItem = function( options ) {
-        var api;
-
-    };
-
     /**
      * Module api
      */
     var moduleApi = {
-        create: function( options ) {
-            return FlexModalItem($.extend({}, conf, options));
-        },
-
-        config: conf,
 
         /**
          * Add a modal by appending the source modal content to a new modal item.
-         * Fire callback after the modal has been initialized, if supplied.
          * @param {string} modalId - modal id like '#modal', will be used as jQuery selector
-         * @param {function} [cb] - callback to run when modal has been initialized, 'this' will be modal
+         * @param {{}|function} [options] - additional options or callback
+         * @property {function} options.afterInit - callback to run when modal has been initialized, 'this' will be the modal element
+         * @property {{}} options.modalOptions - custom options for this modal only
          * @returns {boolean} - whether the initialization was successful or not
          */
-        add: function( modalId, cb ) {
+        add: function( modalId, options ) {
             modalId = modalId || '';
             modalId = sanitizeId(modalId);
+            if ( $.isFunction(options) ) {
+                options = {
+                    cb: options
+                };
+            } else {
+                options = options || {};
+            }
 
             var $sourceModal = $('#'+ modalId);
             if ( !$sourceModal.length ) return false;
@@ -138,16 +136,16 @@
             var $newModalContent = $newModal.children('.' + CLASS_MODAL_ITEM_CONTENT);
             // merge options with defaults and options on the source modal tag if defined
             // like: data-close-btn-markup="false" => closeBtnMarkup: false
-            var options = $.extend(true, {}, conf.modalOptions, $sourceModal.data());
+            var modalOptions = $.extend(true, {}, defaults.modalOptions, $sourceModal.data(), options.modalOptions);
 
             // set id and options for later use
             $newModal.attr('id', modalId);
-            $newModal.data('options', options);
+            $newModal.data('options', modalOptions);
             // append the source markup to the new item content
             $newModalContent.children('.' + CLASS_MODAL_ITEM_CONTENT_INNER).append(modalContent);
 
-            if ( options.closeBtnMarkup ) {
-                $newModalContent.append($(options.closeBtnMarkup));
+            if ( modalOptions.closeBtnMarkup ) {
+                $newModalContent.append($(modalOptions.closeBtnMarkup));
             }
             // copy all classes from target modal to new modal item
             // except the hide class
@@ -155,15 +153,15 @@
 
             $sourceModal.remove();
             $root.append($newModal);
-            if ( cb ) {
-                cb.call($newModal[0], api);
+            if ( $.isFunction(options.cb) ) {
+                options.cb.call($newModal[0], this);
             }
 
             return true;
         },
 
         /**
-         * open a modal
+         * Open a modal
          * @param {string} modalId - with or without leading hash supported
          * @returns {{}}
          */
@@ -171,13 +169,14 @@
             modalId = modalId || '';
             modalId = sanitizeId(modalId);
 
+            var self = this;
             var $modal = $root.children('#' + modalId);
             // if the modal is not initialized yet, do it and open it afterwards
             if ( !$modal.length ) {
-                if ( addModal(modalId) === true ) {
-                    open(modalId);
+                if ( moduleApi.add(modalId) === true ) {
+                    moduleApi.open(modalId);
                 }
-                return api;
+                return this;
             }
 
             var options = $modal.data('options');
@@ -185,7 +184,7 @@
             if ( options.autoCloseOthers === true ) {
                 // close every child modal that's visible
                 $root.children('.' + CLASS_MODAL_ITEM_MODIFIER_VISIBLE).each(function() {
-                    close($(this).attr('id'));
+                    moduleApi.close($(this).attr('id'));
                 });
             }
 
@@ -193,7 +192,7 @@
             $modal.on('transitionend.open.' + NAMESPACE + ' webkitTransitionEnd.open.' + NAMESPACE, function( event ) {
                 if ( !$modal.is(event.target) ) return;
 
-                $modal.trigger('afterOpen.' + NAMESPACE, api);
+                $modal.trigger('afterOpen.' + NAMESPACE, self);
                 $modal.off('.open.' + NAMESPACE);
             });
 
@@ -201,17 +200,18 @@
             // force layout, to enable css transitions
             $modal.width();
             $modal.addClass(CLASS_MODAL_ITEM_MODIFIER_VISIBLE);
-            $modal.trigger('open.' + NAMESPACE, api);
+            $modal.trigger('open.' + NAMESPACE, this);
 
-            return api;
+            return this;
         },
 
         /**
          * Close and remove a modal or all modals if no modal id has been supplied
-         * @param {string} [modalId]
+         * @param {string} [modalId] - with or without leading hash supported
          * @returns {{}}
          */
         close: function( modalId ) {
+            var self = this;
             var $modal;
 
             if ( modalId === undefined ) {
@@ -220,7 +220,7 @@
                 modalId = sanitizeId(modalId);
 
                 $modal = $root.children('#' + modalId);
-                if ( !$modal.length ) return api;
+                if ( !$modal.length ) return this;
             }
 
             // wait for transitionend event to remove the ready class
@@ -228,14 +228,14 @@
                 if ( !$modal.is(event.target) ) return;
 
                 $modal.removeClass(CLASS_MODAL_ITEM_MODIFIER_READY);
-                $modal.trigger('afterClose.' + NAMESPACE, api);
+                $modal.trigger('afterClose.' + NAMESPACE, self);
                 $modal.off('.close.' + NAMESPACE);
             });
 
             $modal.removeClass(CLASS_MODAL_ITEM_MODIFIER_VISIBLE);
-            $modal.trigger('close.' + NAMESPACE, api);
+            $modal.trigger('close.' + NAMESPACE, this);
 
-            return api;
+            return this;
         }
     };
 
