@@ -58,6 +58,7 @@
 
 @media ( min-width: 768px ) {
     .flex-modal-item__content-inner {
+        width: 100%;
         padding: 30px 40px 30px 30px;
     }
     .flex-modal-item__close {
